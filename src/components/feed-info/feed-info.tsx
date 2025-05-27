@@ -1,28 +1,36 @@
-import { FC } from 'react';
-
+import { FC, memo, useMemo } from 'react';
+import { useAppSelector } from '@app-store';
 import { TOrder } from '@utils-types';
 import { FeedInfoUI } from '../ui/feed-info';
+import { getOrders as selOrders, getTotal, getTotalToday } from '@slices';
 
-const getOrders = (orders: TOrder[], status: string): number[] =>
+const selectOrderNumbers = (orders: TOrder[], status: string) =>
   orders
-    .filter((item) => item.status === status)
-    .map((item) => item.number)
+    .filter((o) => o.status === status)
+    .map((o) => o.number)
     .slice(0, 20);
 
-export const FeedInfo: FC = () => {
-  /** TODO: взять переменные из стора */
-  const orders: TOrder[] = [];
-  const feed = {};
+const FeedInfo: FC = () => {
+  const orders = useAppSelector(selOrders);
+  const total = useAppSelector(getTotal);
+  const totalToday = useAppSelector(getTotalToday);
 
-  const readyOrders = getOrders(orders, 'done');
-
-  const pendingOrders = getOrders(orders, 'pending');
+  const readyOrders = useMemo(
+    () => selectOrderNumbers(orders, 'done'),
+    [orders]
+  );
+  const pendingOrders = useMemo(
+    () => selectOrderNumbers(orders, 'pending'),
+    [orders]
+  );
 
   return (
     <FeedInfoUI
       readyOrders={readyOrders}
       pendingOrders={pendingOrders}
-      feed={feed}
+      feed={{ total, totalToday }}
     />
   );
 };
+
+export default memo(FeedInfo);

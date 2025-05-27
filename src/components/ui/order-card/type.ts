@@ -13,6 +13,7 @@ type TOrderInfo = {
   remains: number;
   total: number;
   date: Date;
+  formattedDate: string;
   _id: string;
   status: string;
   name: string;

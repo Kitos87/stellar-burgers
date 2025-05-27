@@ -1,1 +1,1 @@
-export { BurgerConstructorElement } from './burger-constructor-element';
+export { default as BurgerConstructorElement } from './burger-constructor-element';

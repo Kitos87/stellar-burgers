@@ -9,6 +9,7 @@ type TOrderInfo = {
     [key: string]: TIngredient & { count: number };
   };
   date: Date;
+  formattedDate: string;
   total: number;
   _id: string;
   status: string;
