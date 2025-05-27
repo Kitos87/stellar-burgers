@@ -1,1 +1,1 @@
-export { BurgerIngredient } from './burger-ingredient';
+export { default as BurgerIngredient } from './burger-ingredient';

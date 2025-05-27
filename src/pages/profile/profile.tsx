@@ -1,51 +1,69 @@
+import { FC, SyntheticEvent, useEffect, useState, useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from '@app-store';
+import { getEmail, getName, updateUser } from '@slices';
 import { ProfileUI } from '@ui-pages';
-import { FC, SyntheticEvent, useEffect, useState } from 'react';
 
-export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  const user = {
-    name: '',
-    email: ''
-  };
+const Profile: FC = () => {
+  const dispatch = useAppDispatch();
+  const userName = useAppSelector(getName);
+  const userEmail = useAppSelector(getEmail);
+
+  const [initialFormValue, setInitialFormValue] = useState({
+    name: userName || '',
+    email: userEmail || ''
+  });
 
   const [formValue, setFormValue] = useState({
-    name: user.name,
-    email: user.email,
+    name: userName || '',
+    email: userEmail || '',
     password: ''
   });
 
   useEffect(() => {
-    setFormValue((prevState) => ({
-      ...prevState,
-      name: user?.name || '',
-      email: user?.email || ''
+    const name = userName || '';
+    const email = userEmail || '';
+    setFormValue((prev) => ({
+      ...prev,
+      name,
+      email
     }));
-  }, [user]);
+    setInitialFormValue({ name, email });
+  }, [userName, userEmail]);
 
   const isFormChanged =
-    formValue.name !== user?.name ||
-    formValue.email !== user?.email ||
+    formValue.name !== initialFormValue.name ||
+    formValue.email !== initialFormValue.email ||
     !!formValue.password;
 
-  const handleSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-  };
+  const handleSubmit = useCallback(
+    (e: SyntheticEvent) => {
+      e.preventDefault();
+      dispatch(updateUser(formValue));
+    },
+    [dispatch, formValue]
+  );
 
-  const handleCancel = (e: SyntheticEvent) => {
-    e.preventDefault();
-    setFormValue({
-      name: user.name,
-      email: user.email,
-      password: ''
-    });
-  };
+  const handleCancel = useCallback(
+    (e: SyntheticEvent) => {
+      e.preventDefault();
+      setFormValue({
+        ...initialFormValue,
+        password: ''
+      });
+    },
+    [initialFormValue]
+  );
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValue((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value
-    }));
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormValue((prev) => ({
+        ...prev,
+        [name]: value
+      }));
+    },
+    []
+  );
 
   return (
     <ProfileUI
@@ -56,6 +74,6 @@ export const Profile: FC = () => {
       handleInputChange={handleInputChange}
     />
   );
-
-  return null;
 };
+
+export default Profile;

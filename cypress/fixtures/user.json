@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "user": {
+    "email": "nikberckut@yandex.ru",
+    "name": "Korovin Nikita"
+  },
+  "accessToken": "mock.access.token",
+  "refreshToken": "mock.refresh.token"
+}
+

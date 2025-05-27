@@ -23,7 +23,7 @@ export const OrderCardUI: FC<OrderCardUIProps> = memo(
           #{String(orderInfo.number).padStart(6, '0')}
         </span>
         <span className='text text_type_main-default text_color_inactive'>
-          <FormattedDate date={orderInfo.date} />
+          {orderInfo.formattedDate}
         </span>
       </div>
       <h4 className={`pt-6 text text_type_main-medium ${styles.order_name}`}>

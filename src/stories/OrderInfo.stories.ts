@@ -34,7 +34,8 @@ export const DefaultOrderInfo: Story = {
           count: 2
         }
       },
-      date: new Date('2024-01-25'),
+      date: new Date('2025-05-27'),
+      formattedDate: '27 мая 2025, 14:00',
       total: 134,
       _id: '233',
       status: 'ready',
